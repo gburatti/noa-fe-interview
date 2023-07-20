@@ -6,12 +6,12 @@ export const Layout = () => {
   return (
     <div className="wrapper">
       <div className="header">
-        <div className="logo">
+        <Link to="/" className="logo">
           <img src={images.logo} alt="Noa logo" />
-        </div>
+        </Link>
         <nav className="nav">
           <div>
-            <Link to="/" className="navItem">Map</Link>
+            <Link to="/map" className="navItem">Map</Link>
           </div>
           <div>
             <Link to="/stats" className="navItem">Stats</Link>
