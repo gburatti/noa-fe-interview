@@ -1,11 +1,12 @@
-import React, { useMemo } from "react";
-import { MapContainer, Marker, Polyline, TileLayer, Tooltip } from "react-leaflet";
-import { LatLngExpression } from "leaflet";
-import { useDataContext } from "../components/providers/DataContext";
-import { calculateDistance } from "../static/map";
+import React, {useMemo} from "react";
+import {MapContainer, Marker, Polyline, TileLayer, Tooltip} from "react-leaflet";
+import {LatLngExpression} from "leaflet";
+import {useDataContext} from "../components/providers/DataContext";
+import {calculateDistance} from "../static/map";
 
 export const Map = () => {
-  const { locationData, ipInfo } = useDataContext();
+  const {locationData, ipInfo} = useDataContext();
+
 
   const currentLocation: LatLngExpression = useMemo(() => {
     if (locationData) return ([locationData.latitude, locationData.longitude])
@@ -36,10 +37,12 @@ export const Map = () => {
         ) : (
           <div className="fullWidthHeight">
             <MapContainer
-              center={currentLocation}
+              // center={currentLocation}
               zoom={13}
               scrollWheelZoom={true}
-              style={{ height: "100%" }}
+              style={{height: "100%"}}
+              bounds={[currentLocation, ipLocation]}
+              boundsOptions={{padding: [30, 30]}}
             >
               <TileLayer
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -56,7 +59,7 @@ export const Map = () => {
                 </Tooltip>
               </Marker>
               <Polyline
-                pathOptions={{ color: "#000000" }}
+                pathOptions={{color: "#000000"}}
                 positions={[
                   currentLocation, ipLocation
                 ]}
