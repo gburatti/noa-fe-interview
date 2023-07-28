@@ -116,3 +116,16 @@ table > tr > td {
         gap: 20px;
     }
 }
+
+.button {
+    background-color: black;
+    color: white;
+    padding: 1rem;
+    border-radius: 16px;
+}
+
+.container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

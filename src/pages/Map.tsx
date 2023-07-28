@@ -1,17 +1,19 @@
-import React, { useMemo } from "react";
+import React, { useContext, useEffect, useMemo } from "react";
 import { MapContainer, Marker, Polyline, TileLayer, Tooltip } from "react-leaflet";
 import { LatLngExpression } from "leaflet";
-import { useDataContext } from "../components/providers/DataContext";
+import { DataContext, useDataContext } from "../components/providers/DataContext";
 import { calculateDistance } from "../static/map";
 
 export const Map = () => {
   const { locationData, ipInfo } = useDataContext();
+ 
 
   const currentLocation: LatLngExpression = useMemo(() => {
     if (locationData) return ([locationData.latitude, locationData.longitude])
 
     return [0, 0];
   }, [locationData]);
+
 
   const ipLocation: LatLngExpression = useMemo(() => {
     if (ipInfo?.loc) {
@@ -36,7 +38,7 @@ export const Map = () => {
         ) : (
           <div className="fullWidthHeight">
             <MapContainer
-              center={currentLocation}
+              bounds={[currentLocation, ipLocation]}
               zoom={13}
               scrollWheelZoom={true}
               style={{ height: "100%" }}

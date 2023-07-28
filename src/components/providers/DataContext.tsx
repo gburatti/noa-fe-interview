@@ -1,10 +1,16 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useReducer, useState } from "react";
 import { IPINFO_API_TOKEN } from "../../static/config";
 import { IIPInfo } from "../../static/types";
+import { useLocation, useNavigate, useNavigation, useRoutes } from "react-router-dom";
+import { inherits } from "util";
 
 interface ContextProps {
   locationData?: GeolocationCoordinates;
   ipInfo?: IIPInfo;
+}
+
+const appReducer = (state: any, action: any)=>{
+
 }
 
 export const DataContext = createContext<ContextProps>({});
@@ -16,29 +22,43 @@ interface ProviderProps {
 export const DataContextProvider = ({ children }: ProviderProps) => {
   const [locationData, setLocationData] = useState<GeolocationCoordinates | undefined>();
   const [ipInfo, setIPInfo] = useState<IIPInfo | undefined>();
+  const location  = useLocation()
 
   useEffect(() => {
-    if (navigator.geolocation) navigator.geolocation.watchPosition(
-      (position) => setLocationData(position.coords),
-      (e) => alert(`Error getting location [${e}]`),
-      { enableHighAccuracy: true })
-    else alert("This device doesn't support geolocation API")
+    let isInitiated: boolean = true
+    if(location.pathname !== '/'){
+      if (navigator.geolocation) navigator.geolocation.watchPosition(
+            (position) => setLocationData(position.coords),
+            (e) => alert(`Error getting location [${e}]`),
+            { enableHighAccuracy: true })
+          else alert("This device doesn't support geolocation API")
+          
+            handleAPI(isInitiated)
+         
+         
+    }
+    return ()=>{
+      isInitiated = false
+    };
+   
+  }, [location.pathname]);
 
-    fetch(`https://ipinfo.io/json?token=${IPINFO_API_TOKEN}`)
-      .then((res) => {
-        res.json()
-          .then((data) => setIPInfo(data))
-          .catch((e) => alert(`Error getting ip info [${e}]`))
-      }).catch((e) => alert(`Error getting ip info [${e}]`))
-  }, []);
-
-  const value = {
-    locationData,
-    ipInfo
+  const handleAPI=async(isInitiated: boolean)=>{
+    try {
+      const response = await fetch(`https://ipinfo.io/json?token=${IPINFO_API_TOKEN}`)
+      try {
+        const data = await response.json()
+        if(isInitiated)setIPInfo(data)
+      } catch (err) {
+        alert(`Error getting ip info [${err}]`)
+      }
+    } catch (error) {
+      alert(`Error getting ip info [${error}]`)
+    }
   }
 
   return (
-    <DataContext.Provider value={value}>
+    <DataContext.Provider value={{locationData, ipInfo}}>
       {children}
     </DataContext.Provider>
   );
