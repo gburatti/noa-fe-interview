@@ -13,7 +13,7 @@ Modify the existing app to match the following criteria.
 
 ## Instructions
 * Share your entire screen so we can see what you are consulting while doing the exercise
-* You can search the web for any hint/solution, no limits. Actually, pls don't use AI to write code ;)
+* You can search the web for any hint/solution, no limits. Actually, pls don't use AI to write code ;
 * If you are stuck on something, move to the next task
 
 ## Estimated time for completion
